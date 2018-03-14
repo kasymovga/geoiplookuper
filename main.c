@@ -17,11 +17,11 @@
 
 int main(int argc, char **argv) {
 	struct sockaddr_in si_me, si_other;
-    int i;
+	int i;
 	socklen_t slen = sizeof(si_other);
 	ssize_t recv_len;
 	int proxy_connection;
-    char buf[BUFLEN + 1];
+	char buf[BUFLEN + 1];
 	struct pollfd fds[1];
 	static MMDB_s geoip_database;
 	int geoip_database_need_close = 0;
@@ -43,14 +43,14 @@ int main(int argc, char **argv) {
 	if (argc == 3) 
 		port = atol(argv[2]);
 
-    if ((fds[0].fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
+	if ((fds[0].fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -1)
 		goto finish;
-     
-    memset(&si_me, 0, sizeof(si_me));
-    si_me.sin_family = AF_INET;
-    si_me.sin_port = htons(port);
-    si_me.sin_addr.s_addr = htonl(INADDR_ANY);
-    if (bind(fds[0].fd, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
+
+	memset(&si_me, 0, sizeof(si_me));
+	si_me.sin_family = AF_INET;
+	si_me.sin_port = htons(port);
+	si_me.sin_addr.s_addr = htonl(INADDR_ANY);
+	if (bind(fds[0].fd, (struct sockaddr*)&si_me, sizeof(si_me)) == -1)
 		goto finish;
 
 	if ((status = MMDB_open(database_path, 0, &geoip_database)) != MMDB_SUCCESS) {
@@ -59,10 +59,10 @@ int main(int argc, char **argv) {
 	}
 	geoip_database_need_close = 1;
 	for(;;)
-    {
+	{
 		fds[0].revents = 0;
 		fds[0].events = POLLIN;
-        if (poll(fds, 1, -1) < 0)
+		if (poll(fds, 1, -1) < 0)
 			goto finish;
 
 		if (fds[0].revents & POLLIN)
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
 			//si_other.sin_port = htons(26000);
 			sendto(fds[0].fd, buf, strlen(buf), 0, &si_other, slen);
 		}
-    }
+	}
 finish:
 	if (errno)
 		perror("ip2c_server");
@@ -105,5 +105,5 @@ finish:
 	if (geoip_database_need_close)
 		MMDB_close(&geoip_database);
  
-    return 0;
+	return 0;
 }
