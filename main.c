@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
 				printf("Unknown request: %s\n", buf);
 				continue; //ignore unknown packets
 			}
-			if (strcmp(address, "local") == 0) {
+			if (strcmp(&buf[extresp_query_string_len], "local") == 0) {
 				other_addr = inet_ntoa(si_other.sin_addr);
 				if (other_addr)
 					strncpy(address, other_addr, sizeof(address));
