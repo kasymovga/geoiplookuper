@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
 	const char *extresp_query_string = "\377\377\377\377extResponse ip2cq ";
 	unsigned int extresp_query_string_len = strlen(extresp_query_string);
 	char address[128];
+	const char *other_addr;
 	char code[3];
 	int port = IP2C_PORT;
 	if (argc < 2) {
@@ -76,7 +77,13 @@ int main(int argc, char **argv) {
 				printf("Unknown request: %s\n", buf);
 				continue; //ignore unknown packets
 			}
-			strncpy(address, &buf[extresp_query_string_len], sizeof(address));
+			if (strcmp(address, "local") == 0) {
+				other_addr = inet_ntoa(si_other.sin_addr);
+				if (other_addr)
+					strncpy(address, other_addr, sizeof(address));
+			} else
+				strncpy(address, &buf[extresp_query_string_len], sizeof(address));
+
 			address[sizeof(address) - 1] = '\0';
 			result = MMDB_lookup_string(&geoip_database, address, &gai_error, &mmdb_error);
 			if (gai_error || mmdb_error || !result.found_entry) {
