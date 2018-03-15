@@ -96,7 +96,7 @@ int main(int argc, char **argv) {
 			}
 			strncpy(code, data.utf8_string, 2);
 			code[2] = '\0';
-			snprintf(buf, BUFLEN, "\377\377\377\377extResponse ip2cr %s %s", address, code);
+			snprintf(buf, BUFLEN, "\377\377\377\377extResponse ip2cr %s %s", &buf[extresp_query_string_len], code);
 			printf("%s\n", buf);
 			//si_other.sin_port = htons(26000);
 			sendto(fds[0].fd, buf, strlen(buf), 0, &si_other, slen);
