@@ -20,7 +20,6 @@ int main(int argc, char **argv) {
 	int i;
 	socklen_t slen = sizeof(si_other);
 	ssize_t recv_len;
-	int proxy_connection;
 	char buf[BUFLEN + 1];
 	struct pollfd fds[1];
 	static MMDB_s geoip_database;
